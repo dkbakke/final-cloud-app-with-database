@@ -104,6 +104,7 @@ class Enrollment(models.Model):
 
 class Question(models.Model):
     # Foreign key to lesson
+    # on_delete of a course, delete referencing Questions
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     # question text
     question_text = models.TextField()
@@ -129,7 +130,7 @@ class Question(models.Model):
 class Choice(models.Model):
     question = models.ForeignKey(Question,on_delete=models.CASCADE)
     choice = models.IntegerField()
-    choice_text= models.CharField()
+    choice_text= models.CharField(max_length=250)
     is_correct = models.BooleanField()
     
 # <HINT> The submission model
