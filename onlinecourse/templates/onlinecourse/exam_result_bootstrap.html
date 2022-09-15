@@ -37,32 +37,28 @@
 
 <div class="container-fluid">
     {% if grade > 80 %}
-    <div class="alert alert-success">
-       <!--HINT Display passed info -->
-       <h5> This is the success section </h5>
-
-    </div>
-        {% else %}
+        <div class="alert alert-success">
+        <!--HINT Display passed info -->
+        <h5> {{ course_name }} - PASS </h5>
+        </div>
+    {% else %}
         <div class="alert alert-danger">
             <!--HINT Display failed info -->
-            <h5> This is the failure section </h5>
+            <h5> {{ course_name }} - FAIL </h5>
         </div>
-        {% endif %}
-        <div class="card-columns-vertical mt-1">
-        <h5 class="">Exam results</h5>
-            <!--HINT Display exam results-->
-            {% for choice in selected %}
-                <div class="card" style="width: 36rem;">
-                   <img class="card-img-left" src="{{MEDIA_URL}}/{{ course.image }}" width="240px" height="240px"
-                        alt="Course image">
-                    <div class="card-body bg-light">
-                        <h5 class="card-title">{{ choice.question }}, <span class="text-success">
-                            {{ choice.choice_text}} enrolled</span></h5>
-                        <p class="card-text">{{ choice.is_correct}}</p>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
+    {% endif %}
+    <div>
+        <h5 class="">Exam Results - Questions and chosen answer(s)</h5>
+        {% for choice in selected %}    
+            {% if choice.is_correct %} 
+                <h5 class=""><span class="text-success">{{ choice.question.question_text }} {{ choice.choice_text}} - Correct</span></h5>
+            {% else %}
+                <h5 class=""><span class="text-danger">{{ choice.question.question_text }}{{ choice.choice_text}} - Incorrect</span></h5>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div>
+        Exam Grade: {{ grade }}
     </div>
 </body>
 </html>
