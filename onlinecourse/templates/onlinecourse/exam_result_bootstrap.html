@@ -39,16 +39,29 @@
     {% if grade > 80 %}
     <div class="alert alert-success">
        <!--HINT Display passed info -->
+       <h5> This is the success section </h5>
+
     </div>
         {% else %}
         <div class="alert alert-danger">
             <!--HINT Display failed info -->
+            <h5> This is the failure section </h5>
         </div>
-        <a class="btn btn-link text-danger" href="{% url 'onlinecourse:course_details' course.id %}">Re-test</a>
         {% endif %}
         <div class="card-columns-vertical mt-1">
         <h5 class="">Exam results</h5>
             <!--HINT Display exam results-->
+            {% for choice in selected %}
+                <div class="card" style="width: 36rem;">
+                   <img class="card-img-left" src="{{MEDIA_URL}}/{{ course.image }}" width="240px" height="240px"
+                        alt="Course image">
+                    <div class="card-body bg-light">
+                        <h5 class="card-title">{{ choice.question }}, <span class="text-success">
+                            {{ choice.choice_text}} enrolled</span></h5>
+                        <p class="card-text">{{ choice.is_correct}}</p>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
     </div>
 </body>
