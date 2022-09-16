@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.views import generic
 from django.contrib.auth import login, logout, authenticate
 import logging
+import math
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 # Create your views here.
@@ -141,28 +142,37 @@ def extract_answers(request):
 def show_exam_result(request, course_id, submission_id):
     context = {}
     course  = get_object_or_404(Course, pk=course_id)
+    context['course_id'] = course.id
     questions = course.question_set.all()
     context['course_name'] = course.name
     submission = get_object_or_404(Submission, pk=submission_id)
     selected_choices = submission.choices.all()
     
-    course_possible_grade = 0
+
+    # Multiple-choice grading policy: Question score will be Right choices minus Wrong choices
+    # with zero as the minimum possible score on a question. 
+    # Question grade is the number of correct choices possible.
+    exam_possible_grade = 0
     student_grade = 0
     for question in questions:
+        exam_possible_grade = exam_possible_grade + question.question_grade
         question_score = 0
-        course_possible_grade = course_possible_grade + question.question_grade
         for choice in selected_choices:
             if ( choice.question == question ):
                 if ( choice.is_correct ):
                     question_score = question_score + 1
                 else:
-                    question_score = 0
-                    break
+                    question_score = question_score - 1
+        
+        if ( question_score < 0 ):
+            question_score = 0
+
         student_grade = student_grade + question_score
         
            
-    context['grade'] = str( student_grade / course_possible_grade * 100 )+'%'
+    context['grade'] =  round(student_grade / exam_possible_grade * 100)
     context['selected'] = selected_choices
+    context['questions'] = questions
     
     return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
 

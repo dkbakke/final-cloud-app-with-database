@@ -46,16 +46,34 @@
             <!--HINT Display failed info -->
             <h5> {{ course_name }} - FAIL </h5>
         </div>
+        <div>
+            <a class="btn btn-link text-danger" href="{% url 'onlinecourse:course_details'  course_id  %}">Re-test</a>
+        </div>
     {% endif %}
+    
+    
+        
     <div>
-        <h5 class="">Exam Results - Questions and chosen answer(s)</h5>
-        {% for choice in selected %}    
-            {% if choice.is_correct %} 
-                <h5 class=""><span class="text-success">{{ choice.question.question_text }} {{ choice.choice_text}} - Correct</span></h5>
-            {% else %}
-                <h5 class=""><span class="text-danger">{{ choice.question.question_text }}{{ choice.choice_text}} - Incorrect</span></h5>
-            {% endif %}
+        <h4 class="">Exam Results</h4>
+        <h5 class="">Grading policy: Right choices minus Wrong choices, minimum is zero </h5>
+        {% for question in questions %}
+             <h5 class=""> Question {{question.id}} {{ question.question_text}}</h5>
+             {% for choice in question.choice_set.all %}
+                    {% for selection in selected %}
+                        {% if selection.id == choice.id %} 
+                            {% if choice.is_correct %}  
+                                <h5 class=""><span class="text-success">Correct choice - {{ choice.question.question_text }} {{ choice.choice_text}}</span></h5>
+                            {% else  %}
+                                <h5 class=""><span class="text-danger">Incorrect choice - {{ choice.question.question_text }}{{ choice.choice_text}}</span></h5>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {%  if selection.id != choice.id %}
+                    <h5 class=""> {{ choice.choice_text}}</h5>
+                {% endif %}
+            {% endfor %}
         {% endfor %}
+       
     </div>
     <div>
         Exam Grade: {{ grade }}
