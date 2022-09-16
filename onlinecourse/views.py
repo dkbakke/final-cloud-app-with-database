@@ -148,10 +148,19 @@ def show_exam_result(request, course_id, submission_id):
     submission = get_object_or_404(Submission, pk=submission_id)
     selected_choices = submission.choices.all()
     
-
+    
     # Multiple-choice grading policy: Question score will be Right choices minus Wrong choices
     # with zero as the minimum possible score on a question. 
     # Question grade is the number of correct choices possible.
+    #		for questions
+	#	    for choices
+	#			for selections
+	#				
+	#				Correct choice and selected -> Right, +1
+	#				Correct choice and not selected -> Right, 0
+	#				Incorrect choice and selected -> Wrong, -1
+	#				Incorrect choice and not selected -> Right, 0
+#
     exam_possible_grade = 0
     student_grade = 0
     for question in questions:
