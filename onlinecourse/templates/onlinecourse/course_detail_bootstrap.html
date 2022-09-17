@@ -98,8 +98,12 @@
                                         </ol>
                                         </div>
                                     </div>
+                            {% empty %}
+                                <h5> Your instructor has not set an exam for this course</h5>
                             {% endfor %}
-                            <input class="btn btn-success btn-block" type="submit" value="Submit">
+                            {% if  course.question_set.all %}
+                                <input class="btn btn-success btn-block" type="submit" value="Submit">
+                            {% endif %}
                         </form>
                     </div>                    
             {% endif %}
