@@ -166,23 +166,17 @@ def show_exam_result(request, course_id, submission_id):
     for question in questions:
         exam_possible_grade = exam_possible_grade + question.question_grade
         question_score = 0
-        for choice in selected_choices:
-            if ( choice.question == question ):
-                if ( choice.is_correct ):
+        for choice in question.choice_set.all():
+            if ( choice in selected_choices and choice.is_correct ):
                     question_score = question_score + 1
-                else:
+            elif ( choice in selected_choices and not choice.is_correct):
                     question_score = question_score - 1
-        
         if ( question_score < 0 ):
             question_score = 0
-
         student_grade = student_grade + question_score
-        
-           
     context['grade'] =  round(student_grade / exam_possible_grade * 100)
     context['selected'] = selected_choices
     context['questions'] = questions
-    
     return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
 
     

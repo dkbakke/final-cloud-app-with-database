@@ -80,10 +80,12 @@
                         <form id="questionform" action="{% url 'onlinecourse:submit' course.id %}" method="post">
                             {% for question in course.question_set.all %}
                             <div class="card mt-1">
-                                        <div class="card-header"><h5>{{ question.question_text}}</h5></div>
+                                        <div class="card-header"><h5> Question #{{question.id}}: {{ question.question_text}}</h5></div>
                                         {% csrf_token %}
                                         <div class="form-group">
+                                            <ol>
                                             {% for choice in question.choice_set.all %}
+                                            <li>
                                             <div class="form-check">
                                                 <label class="form-check-label">
                                                     <input type="checkbox" name="choice_{{choice.id}}"
@@ -91,13 +93,14 @@
                                                         value="{{choice.id}}">{{ choice.choice_text }}
                                                 </label>
                                             </div>
+                                            </li>
                                             {% endfor %}
+                                        </ol>
                                         </div>
                                     </div>
-                                <input class="btn btn-success btn-block" type="submit" value="Submit">
                             {% endfor %}
+                            <input class="btn btn-success btn-block" type="submit" value="Submit">
                         </form>
-                            <div class="card-body">{{choice.choice_text}}</div>
                     </div>                    
             {% endif %}
         </div>
