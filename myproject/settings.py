@@ -28,7 +28,7 @@ DEBUG = True
 
 # <HINT> add your cloud host here
 ALLOWED_HOSTS = [
-		"onlinecourse.szk7aj2c7gn.us-east.codeengine.appdomain.cloud"
+		"onlinecourse.*.us-east.codeengine.appdomain.cloud"
 ]
 
 
